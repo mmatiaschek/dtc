@@ -11,6 +11,11 @@ ifndef::imagesdir[:imagesdir: ../../images]
 [[section-architecture-constraints]]
 == Architecture Constraints
 
+DAMA shall
+
+- not be a gambling platform that requires a gambling license
+- be easily accessible for new users who receive a game invite from a friend
+- automatically built and tested for quick release cycles and high quality standards
 
 [role="arc42help"]
 ****
