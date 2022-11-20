@@ -31,7 +31,7 @@ ifdef::backend-html5[]
 endif::backend-html5[]
 
 
-include::chapters/about-arc42.adoc[]
+//include::chapters/about-arc42.adoc[]
 
 // horizontal line
 ***

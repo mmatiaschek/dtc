@@ -12,8 +12,10 @@ ifndef::imagesdir[:imagesdir: ../../images]
 == Introduction and Goals
 
 DAMA is a multiplayer platform for playing checkers online against friends or other unknown players.
-For a VAS subscription of daily 2 Birr you get daily 100 coins which allows on average for 10 games (depending league: low league less coins, champions league more coins)
+For a VAS subscription of daily 2 Birr you get daily 100 coins which allows on average for 10 games. Game cost can depend on skill of player, there are different levels of cost and potential winnings per game.
+
 You can get additional coins by 
+
 - one-off payment
 - winning against other players
 - inviting friends
