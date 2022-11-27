@@ -1,31 +1,21 @@
-# This is a basic workflow to help you get started with Actions
+---
+name: "tagged-release"
 
-name: CI
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-  # Allows you to run this workflow manually from the Actions tab
+    tags:
+      - "v*"
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+  tagged-release:
+    name: "Tagged Release"
+    runs-on: "ubuntu-latest"
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+
       - uses: actions/checkout@v3
 
-      # Runs a single command using the runners shell
       - name: "Run build of HTML version"
         run: ./dtcw generateHTML
 
@@ -36,11 +26,8 @@ jobs:
           path: build/html5
           retention-days: 90
           
-      # Runs a set of commands using the runners shell
-      - name: "Run a multi-line script"
-        run: |
-          echo generating PDF
-          ./dtcw generatePDF
+      - name: "Run build of PDF version"
+        run: ./dtcw generatePDF
 
       - name: "Upload PDF version"
         uses: actions/upload-artifact@v3.1.1
@@ -49,13 +36,16 @@ jobs:
           path: build/pdf/arc42/arc42.pdf
           retention-days: 90
 
-      - name: "pre-release"
+      - uses: actions/download-artifact@v3
+        with:
+          name: html5
+          
+      - name: "release"
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "latest"
-          prerelease: true
-          title: "Development Build"
+          prerelease: false
           files: |
-            build/html5
+            build/html5.zip
             build/pdf/arc42/arc42.pdf
