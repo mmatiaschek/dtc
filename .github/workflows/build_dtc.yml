@@ -26,6 +26,10 @@ jobs:
           path: build/html5
           retention-days: 90
           
+      - uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r html5.zip build/html5
+
       - name: "Run build of PDF version"
         run: ./dtcw generatePDF
 
@@ -35,10 +39,6 @@ jobs:
           name: PDF
           path: build/pdf/arc42/arc42.pdf
           retention-days: 90
-
-      - uses: actions/download-artifact@v3
-        with:
-          name: html5
           
       - name: "release"
         uses: "marvinpinto/action-automatic-releases@latest"
