@@ -29,8 +29,22 @@ jobs:
       - name: Run build of HTML version
         run: ./dtcw generateHTML
 
+      - name: Upload html5 version
+        uses: actions/upload-artifact@v3.1.1
+        with:
+          name: html5
+          path: build/html5
+          retention-days: 90
+          
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
         run: |
           echo generating PDF
           ./dtcw generatePDF
+
+      - name: Upload PDF version
+        uses: actions/upload-artifact@v3.1.1
+        with:
+          name: PDF
+          path: build/pdf/arc42/arc42.pdf
+          retention-days: 90
