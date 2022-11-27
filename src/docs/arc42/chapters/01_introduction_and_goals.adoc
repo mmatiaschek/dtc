@@ -118,24 +118,25 @@ A table with quality goals and concrete scenarios, ordered by priorities
 | Scenario
 
 | 1
+| Functional Suitability
+| Whenever users have time for a quick game, they should be able to do it without long wait time for opponents
+
+| 2
 | Security
 | As the game handles VAS for the user, it must not be possible by third parties to abuse the billing system
 
-| 2
+| 3
 | Transparency
 | Payments through VAS must be transparent in order to ensure trust of users and them recommending DAMA to friends
 
-| 3
+| 4
 | Compatibility
 | The game must be compatible with the primary compute platform and app distribution channel of the target demographic
 
-| 4
+| 5
 | Reliability
 | Ongoing games must not be interruped, rewards must be fairly distributed
 
-| 5
-| Functional Suitability
-| Whenever users have time for a quick game, they should be able to do it without long wait time for opponents
 |===
 
 
