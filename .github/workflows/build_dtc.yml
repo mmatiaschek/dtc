@@ -26,10 +26,10 @@ jobs:
       - uses: actions/checkout@v3
 
       # Runs a single command using the runners shell
-      - name: Run build of HTML version
+      - name: "Run build of HTML version"
         run: ./dtcw generateHTML
 
-      - name: Upload html5 version
+      - name: "Upload html5 version"
         uses: actions/upload-artifact@v3.1.1
         with:
           name: html5
@@ -37,30 +37,20 @@ jobs:
           retention-days: 90
           
       # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: "Run a multi-line script"
         run: |
           echo generating PDF
           ./dtcw generatePDF
 
-      - name: Upload PDF version
+      - name: "Upload PDF version"
         uses: actions/upload-artifact@v3.1.1
         with:
           name: PDF
           path: build/pdf/arc42/arc42.pdf
           retention-days: 90
 
-
-  pre-release:
-    name: "Pre Release"
-    runs-on: "ubuntu-latest"
-
-    steps:
-      # ...
-      - name: "Build & test"
-        run: |
-          echo "done!"
-
-      - uses: "marvinpinto/action-automatic-releases@latest"
+      - name: "pre-release"
+        uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "latest"
