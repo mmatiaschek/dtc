@@ -9,12 +9,12 @@ on:
 
 jobs:
   build_arc_docs:
-    uses: ./.github/workflow/build_arc_docs.yml
+    uses: ./.github/workflows/build_arc_docs.yml
 #    with:
 #      config-path: .github/labeler.yml
 #    secrets:
 #      envPAT: ${{ secrets.envPAT }}
   release:
-    uses: ./.github/workflow/release.yml
+    uses: ./.github/workflows/release.yml
     with:
       secret: ${{ secrets.GITHUB_TOKEN }}
