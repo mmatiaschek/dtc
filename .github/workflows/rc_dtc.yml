@@ -1,16 +1,15 @@
 ---
-name: "tagged-release"
+name: "pre-release"
 
 on:
   push:
     tags:
-      - "v[0-9]+.[0-9]+.[0-9]+"
-      - "!*-rc[0-9]+"
+      - "*-rc[0-9]+"
   workflow_dispatch:
 
 jobs:
-  tagged-release:
-    name: "Tagged Release"
+  pre-release:
+    name: "Release Candidate"
     runs-on: "ubuntu-latest"
 
     steps:
@@ -27,7 +26,7 @@ jobs:
         with:
           name: html5
           path: build/html5
-          retention-days: 90
+          retention-days: 5
           
       - name: zip html5 version
         uses: montudor/action-zip@v1
@@ -50,14 +49,15 @@ jobs:
         with:
           name: PDF
           path: solution_architecture-${{ env.RELEASE_VERSION }}.pdf
-          retention-days: 90
+          retention-days: 5
           
-      - name: "release"
+      - name: "release candidate"
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: false
-          # automatic_release_tag: "latest"
+          # automatic_release_tag: "latest-rc"
+          prerelease: true
+          title: "Release Candidate"
           files: |
             solution_architecture-${{ env.RELEASE_VERSION }}.zip
             solution_architecture-${{ env.RELEASE_VERSION }}.pdf
