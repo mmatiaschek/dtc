@@ -1,15 +1,16 @@
 ---
-name: "pre-release"
+name: "build solution architecture docs"
 
 on:
   push:
     tags:
-      - "*-rc[0-9]+"
+      - "v[0-9]+.[0-9]+.[0-9]+"
+      - "v*-rc[0-9]+"
   workflow_dispatch:
 
 jobs:
-  pre-release:
-    name: "Release Candidate"
+  build-html5:
+    name: "build solution architecture docs as html5"
     runs-on: "ubuntu-latest"
 
     steps:
@@ -21,17 +22,30 @@ jobs:
       - name: "Run build of HTML version"
         run: ./dtcw generateHTML
 
-      - name: "Upload html5 version"
-        uses: actions/upload-artifact@v3.1.1
-        with:
-          name: html5
-          path: build/html5
-          retention-days: 5
-          
       - name: zip html5 version
         uses: montudor/action-zip@v1
         with:
           args: zip -qq -r solution_architecture-${{ env.RELEASE_VERSION }}.zip build/html5
+      
+      - name: "Upload html5 version"
+        uses: actions/upload-artifact@v3.1.1
+        with:
+          name: solution_architecture-${{ env.RELEASE_VERSION }}.zip
+          path: solution_architecture-${{ env.RELEASE_VERSION }}.zip
+          # retention-days: 90
+          
+      
+
+  build-pdf:
+    name: "build solution architecture docs as PDF"
+    runs-on: "ubuntu-latest"
+
+    steps:
+
+      - uses: actions/checkout@v3
+      - name: Set version
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+
 
       - name: "Remove help for PDF version"
         run: |
@@ -47,17 +61,6 @@ jobs:
       - name: "Upload PDF version"
         uses: actions/upload-artifact@v3.1.1
         with:
-          name: PDF
+          name: solution_architecture-${{ env.RELEASE_VERSION }}.pdf
           path: solution_architecture-${{ env.RELEASE_VERSION }}.pdf
-          retention-days: 5
-          
-      - name: "release candidate"
-        uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          # automatic_release_tag: "latest-rc"
-          prerelease: true
-          title: "Release Candidate"
-          files: |
-            solution_architecture-${{ env.RELEASE_VERSION }}.zip
-            solution_architecture-${{ env.RELEASE_VERSION }}.pdf
+          # retention-days: 90

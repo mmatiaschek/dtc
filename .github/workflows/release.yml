@@ -1,0 +1,40 @@
+---
+name: "tagged-release"
+
+on:
+  workflow_run:
+    workflows: ["build solution architecture docs"]
+    type:
+      - complete
+  workflow_dispatch:
+
+jobs:
+  tagged-release:
+    name: "Tagged Release"
+    runs-on: "ubuntu-latest"
+
+    steps:
+
+      - uses: actions/checkout@v3
+      - name: Set version
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+              
+      - name: "Download PDF version"
+        uses: actions/download-artifact@v3
+        with:
+          name: solution_architecture-${{ env.RELEASE_VERSION }}.pdf
+
+      - name: "Download html5 version"
+        uses: actions/download-artifact@v3
+        with:
+          name: solution_architecture-${{ env.RELEASE_VERSION }}.zip
+
+      - name: "release"
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          # automatic_release_tag: "latest"
+          files: |
+            solution_architecture-${{ env.RELEASE_VERSION }}.zip
+            solution_architecture-${{ env.RELEASE_VERSION }}.pdf
