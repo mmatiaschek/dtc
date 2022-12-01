@@ -2,10 +2,7 @@
 name: "tagged-release"
 
 on:
-  workflow_run:
-    workflows: ["build solution architecture docs"]
-    type:
-      - complete
+  workflow_call:
   workflow_dispatch:
 
 jobs:
