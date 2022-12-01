@@ -16,5 +16,6 @@ jobs:
 #      envPAT: ${{ secrets.envPAT }}
   release:
     uses: ./.github/workflows/release.yml
-    with:
-      secret: ${{ secrets.GITHUB_TOKEN }}
+    # with:
+    #   secrets:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
