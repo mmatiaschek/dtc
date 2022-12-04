@@ -39,18 +39,15 @@ jobs:
           path: solution_architecture-${{ env.RELEASE_VERSION }}.zip
           # retention-days: 90
           
-      
+  # build-pdf:
+  #   name: "build PDF"
+  #   runs-on: "ubuntu-latest"
 
-  build-pdf:
-    name: "build PDF"
-    runs-on: "ubuntu-latest"
+  #   steps:
 
-    steps:
-
-      - uses: actions/checkout@v3
-      - name: Set version
-        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-
+  #     - uses: actions/checkout@v3
+  #     - name: Set version
+  #       run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 
       - name: "Remove help for PDF version"
         run: |
