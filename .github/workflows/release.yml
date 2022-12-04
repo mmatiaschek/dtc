@@ -2,10 +2,7 @@
 name: "tagged-release"
 
 on:
-  workflow_run:
-    workflows: ["build solution architecture docs"]
-    type:
-      - complete
+  workflow_call:
   workflow_dispatch:
 
 jobs:
@@ -22,12 +19,12 @@ jobs:
       - name: "Download PDF version"
         uses: actions/download-artifact@v3
         with:
-          name: solution_architecture-${{ env.RELEASE_VERSION }}.pdf
+          name: solution_architecture.pdf
 
       - name: "Download html5 version"
         uses: actions/download-artifact@v3
         with:
-          name: solution_architecture-${{ env.RELEASE_VERSION }}.zip
+          name: solution_architecture.zip
 
       - name: "release"
         uses: "marvinpinto/action-automatic-releases@latest"
