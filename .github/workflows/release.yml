@@ -37,13 +37,13 @@ jobs:
             solution_architecture-${{ env.RELEASE_VERSION }}.zip
             solution_architecture-${{ env.RELEASE_VERSION }}.pdf
         
-      # - name: "release"
-      #   if: {{ !(contains(github.event.ref, '-rc')) }}
-      #   uses: "marvinpinto/action-automatic-releases@latest"
-      #   with:
-      #     repo_token: "${{ secrets.GITHUB_TOKEN }}"
-      #     prerelease: false
-      #     automatic_release_tag: "latest"
-      #     files: |
-      #       solution_architecture-${{ env.RELEASE_VERSION }}.zip
-      #       solution_architecture-${{ env.RELEASE_VERSION }}.pdf
+      - name: "release"
+        if: (!contains(github.event.ref, '-rc'))
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          automatic_release_tag: "latest"
+          files: |
+            solution_architecture-${{ env.RELEASE_VERSION }}.zip
+            solution_architecture-${{ env.RELEASE_VERSION }}.pdf
