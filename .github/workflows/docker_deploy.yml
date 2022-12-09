@@ -22,8 +22,8 @@ jobs:
 
     - name: Deploy Docker Containers
       run: |
-        docker-compose ps -a
+        docker-compose up -d
       env:
-        DOCKER_HOST: ssh://<user>@<server-ip>
+        DOCKER_HOST: ssh://${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}
         #DOCKER_TLS_VERIFY: 1
         #DOCKER_CERT_PATH: /github/workspace/.ssh
