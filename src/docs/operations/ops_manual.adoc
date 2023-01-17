@@ -1,0 +1,521 @@
+= Demo Operations
+
+Goal of this document is to help enable operations of the Demo system.
+Out of scope is the deep learning environment with it's separate operations manual.
+
+== Overview
+
+=== Systems
+
+* Android App
+* Firebase backend
+* Google Play Store
+* Google Cloud Platform
+* Appcenter.ms Build Platform
+* Deep learning environment (out of scope)
+* Website (out of scope)
+
+=== Owners, Operators and Contacts
+
+Product owner is Markus Matiaschek link:mailto:mmatiaschek@gmail.com[mmatiaschek@gmail.com]
+
+|===
+| System | Owner | Operator | Contact
+
+| App
+| mmatiaschek
+| Name (Org)
+| contact
+
+| Google Firebase
+| mmatiaschek
+| Google
+| mmatiaschek@gmail.com http://firebase.google.com
+
+| Google Play Store
+| mmatiaschek
+| Google
+| mmatiaschek@gmail.com https://play.google.com
+
+| Google Cloud Platform
+| mmatiaschek
+| Google
+| mmatiaschek@gmail.com http://cloud.google.com
+|===
+
+=== Operation Times
+
+24/7
+
+=== System Classification
+
+Android App powered by Firebase and machine learning backend
+
+=== Systems History
+
+history is available on https://github.com/mmatiaschek/dtc[Github]
+
+=== Revisions History
+
+tba
+
+=== Restore / Recovery Tests
+
+TODO
+
+=== Compliance
+
+==== GDPR / DSGVO
+
+* Informed consent
+
+==== General
+
+* ISO 9001
+
+==== Medical
+
+* ISO 13485
+* HIPAA Compliance
+
+== Systems Architecture and Interfaces
+
+The app is offline first and syncs with the firebase backend
+
+=== External Interfaces (to other Organisations)
+
+none
+
+=== Internal
+
+none
+
+=== Inbound Interfaces
+
+app <--> local Room database <--> firebase storage/database
+
+== Installation and Systems Requirements -- Server
+
+Create a Firebase project with your Google Account
+
+=== Non-default Systems Parameters
+
+=== Storage
+
+https://console.firebase.google.com/u/0/project/-growth-monitor-dev.appspot.com/rules[Firebase Storage Rules]
+
+authentication needed for data, assets read-only
+
+[,json]
+----
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /assets/frozen_resnet_50.pb {
+      allow read: if request.auth != null;
+    }
+    match /data/{allPaths=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
+----
+
+=== remote config
+
+Create the following key value settings
+
+|===
+| key | value | description |  |
+
+| allow_delete
+| false
+| allow users to delete persons and measurements
+|
+|
+
+| allow_edit
+| false
+| allow users to edit measurements
+|
+|
+
+| admins
+| mmatiaschek@gmail.com
+| comma-separated list of userIds of admins time_to_allow_editing
+| 20
+| users can edit measurements for X hours after creation (when allow_edit = true)
+
+| measure_visibility
+| true
+| when set to false all measurements are concealed to the users (useful for standardization test)
+|
+|
+|===
+
+=== Non-default Database Parameters
+
+https://console.firebase.google.com/u/0/project//rules[Firebase Database Rules]
+
+Allow read/write access on all documents to any user signed in to the application
+
+[,json]
+----
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if request.auth.uid != null;
+    }
+  }
+}
+----
+
+=== 3rd Party Tools
+
+Google ...
+
+=== Installation
+
+* Create a Firebase project
+* setup above rules
+* download google-services.json and replace in app
+* build and publish Android app
+
+=== First Start
+
+TODO: test environment
+
+== Build and release
+
+=== Release management
+
+See https://github.com/mmatiaschek/dtc/releases[GitHub] and https://play.google.com/apps/publish/[Google Play Store Console].
+
+=== Build
+
+.github/workflows/main.yml workflow is triggered when a semver tag is pushed.
+
+==== Environment variables and secrets
+
+Set up the following environment variables and secrets
+
+|===
+| Name | Default | Description
+
+| APP_ENV
+| dev
+| dev or prod?
+
+| DB_CONNECTION
+| mysql
+| type of database
+
+| DB_HOST
+| database
+| hostname of database
+
+| DB_PORT
+| 3306
+| db port
+
+| DB_DATABASE
+| dama
+| name of the database
+
+| DB_USERNAME
+| dama
+| database username
+
+| DB_PASSWORD
+| SECRET
+| secret to define the db user password
+
+|
+|
+|
+|===
+
+==== GitHub deployment variables and secrets
+
+|===
+| Name | Default | Description
+
+| REMOTE_HOST
+| damagames.com
+| FQDN of linux server
+
+| REMOTE_USER
+| root
+| user on linux server
+
+| SSH_FINGERPRINT
+|
+| ssh-keyscan damagames.com
+
+| SSH_PRIVATE_KEY
+| SECRET
+| ssh-keygen -m PEM -t rsa -b 4096 + ~/.ssh/authorized_keys
+
+|
+|
+|
+|===
+
+== Installation and System Requirements - Client
+
+=== Client Hardware Requirements
+
+* Phab 2 Pro
+* Asus ZenPhone AR
+
+=== Released Operating Systems and Version
+
+* Android 6.0 and above
+* https://github.com/mmatiaschek/dtc/blob/master/app/build.gradle[mindSdk 23, max 27]
+
+=== 3rd Party Apps Client
+
+* Google Services (not available in China)
+* https://play.google.com/store/apps/details?id=com.google.tango&hl=de[Tango Core App latest update]
+
+=== Non-default Android Parameters
+
+* automatic updates
+* hardening and security measures (TODO: link)
+
+=== Installation Client
+
+==== Internal Tests
+
+Invite only
+
+https://github.com/mmatiaschek/dtc/blob/master/doc/install_play_store.md[Install from Google Play Store]
+
+==== Closed Beta
+
+==== Prod
+
+=== First Start
+
+login
+
+=== Configuration
+
+Settings Screen
+
+== Overview of Installed Development, Test and Productive Environments
+
+|===
+| Env | Url
+
+| dev
+| https://console.firebase.google.com/u/0/project/[Firebase Console]
+
+| test
+| https://console.firebase.google.com/u/0/project/[Firebase Console]
+
+| prod
+| [Firebase Console](https://console.firebase.google.com/u/0/
+|===
+
+=== Interface Configuration
+
+make productive
+
+* remove debugdb
+* AppConstants ROOT_URL
+* google-services.json
+* sign
+ ** TODO keystore
+ ** jar & apk signature
+
+== Starting and Stopping Operation
+
+=== Initial Start of Operation
+
+ready after setup of project, see above
+
+=== Regular Startup Und Shutdown
+
+permanent shutdown
+
+* https://console.firebase.google.com/u/0/project//general/android:de.[remove app and delete project]
+
+=== Planned Shutdown and Restart
+
+=== Unplanned Shutdown (crash)
+
+== Running Operations
+
+=== Day to Day Operations
+
+=== Monthly Plan
+
+=== Usermanagement
+
+* closed beta, no self registration
+* https://console.firebase.google.com/u/0/project/[all users must be create manually in the Firebase Console]
+
+=== Permanent Background Processes, Inbound and Outbound
+
+* timed 5 minute sync from app to backend
+
+=== Daily, Weekly, Monthly and Other Repeating Tasks
+
+=== Backup
+
+==== Storage
+
+____
+rsync
+____
+
+`gsutil -m rsync -r gs://dtc.appspot.com/ ../../backup/prod/20180610`
+
+____
+rsync delete files
+____
+
+`gsutil -m rsync -d -r gs://dtc-dev.appspot.com/ dev/20180618/`
+
+____
+setup
+____
+
+* create python 2.7 environment
+* https://cloud.google.com/storage/docs/gsutil_install
+* authenticate
+
+[,bash]
+----
+/cmder$ cd ../Work/CGM/pilot-data/
+/Work/CGM/pilot-data$ cd gsenv/
+/Work/CGM/pilot-data/gsenv$ source bin/activate
+(gsenv) /Work/CGM/pilot-data/gsenv$ mkdir -p ../../backup/dev/20180616
+(gsenv) /Work/CGM/pilot-data/gsenv$ gsutil -m rsync -r gs://dtc-dev.appspot.com/ ../../backup/dev/20180616
+
+WARNING: gsutil rsync uses hashes when modification time is not available at
+both the source and destination. Your crcmod installation isn't using the
+module's C extension, so checksumming will run very slowly. If this is your
+first rsync since updating gsutil, this rsync can take significantly longer than
+usual. For help installing the extension, please see "gsutil help crcmod".
+
+Building synchronization state...
+Starting synchronization...
+Copying gs://dtc-dev.appspot.com/data/person/20180525-Shekhar-1/measurements/1527246934911/pc_20180525-Shekhar-1_1527246934911_018.vtk...
+Copying gs://dtc-dev.appspot.com/data/person/20180525-Shekhar-1/1527241580962_20180525-Shekhar-1.png...
+----
+
+==== Database
+
+firestore-backup-restore
+
+* https://www.npmjs.com/package/firestore-backup-restore[npm]
+* https://github.com/willhlaw/node-firestore-backup-restore[Github]
+
+===== Installation
+
+[,cmd]
+----
+sudo apt install npm
+npm install -g firestore-backup-restore
+----
+
+===== Backup
+
+[,cmd]
+----
+C:\Users\mmatiaschek\Work\CGM\backup\prod
+λ  firestore-backup-restore -a dtc-firebase-adminsdk-wiy1s-1dbe6c9f45.json -B 20180702\db\
+----
+
+or
+
+[,bash]
+----
+firestore-backup-restore --accountCredentials ~/adminsdk.json --backupPath db -S -P
+----
+
+Docker: copy key.json to /srv/data and:
+
+[,docker]
+----
+sudo docker run --rm -v /srv/data:/mnt mmatiaschek/firebase-backup-restore:latest --accountCredentials /mnt/key.json --backupPath /mnt/db -P -S
+----
+
+=== Monitoring, Crashlytics, Maintenance and Escalation
+
+* [monitoring and crashlytics](https://console.firebase.google.com/u/0/project//android:de.
+* https://github.com/mmatiaschek/dtc/issues[maintenance on Github]
+* escalation to info@childgrowthmonitor.org
+
+== (key) Performance Indications
+
+TODO: https://console.firebase.google.com/u/0/project//[Firebase Performance]
+
+=== Application KPIs -- Server
+
+=== KPIs -- Client
+
+== Known Limitations
+
+=== Functional Limitations
+
+generation of automatic anthropometric results TBA
+
+=== Technical Limitations
+
+works only on Google Project Tango smartphones
+
+=== Limitations from Capacity
+
+frames per second recording
+
+== Archiving and Deleting Data
+
+All data can related to persons by a simple, human generatable code.
+This code is printed as a QR code on the informed consent to ensure
+data protection.
+Data access CRUD is enabled with this code.
+
+=== Transaction Data (fast Growing Data)
+
+temporal data is deleted 2 years after conclusion of project or earlier
+
+=== Master Data (slowly Growing Data)
+
+master data is kept as long as consent applies.
+
+=== Log Files and Error Files
+
+only stored in [crashlytics](https://console.firebase.google.com/u/0/
+
+=== Capacity Management
+
+Google Cloud Platform
+
+=== Capacity Recording and Monitoring
+
+Google Firebase
+
+=== Regular Review of Capacity Utilization
+
+mmatiaschek
+
+=== Corrective Action to Eliminate Misuse
+
+regular manual checks by mmatiaschek
+
+=== Capacity Planning
+
+Google Firebase / Cloud Platform
+
+== Attachments
+
+=== TODOs
+
+* document production build (see ## Interface configuration)
+* automate production build
+
+=== ReleaseNotes.txt
+
+TODO from https://play.google.com/apps/publish/?account=#ManageReleaseTrackPlace:p=de.[Google Play Store Console], maybe GitHub Releases and Commits
