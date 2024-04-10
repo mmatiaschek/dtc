@@ -8,15 +8,9 @@ on:
       - 'v*-rc[0-9]+'
 
 jobs:
-  build_arc_docs:
-    uses: ./.github/workflows/build_arc_docs.yml
-#    with:
-#      config-path: .github/labeler.yml
-#    secrets:
-#      envPAT: ${{ secrets.envPAT }}
+  build_docs:
+    uses: ./.github/workflows/build_docs.yml
   release:
     uses: ./.github/workflows/release.yml
-    needs: 'build_arc_docs'
-    # with:
-    #   secrets:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    needs: 'build_docs'
+
