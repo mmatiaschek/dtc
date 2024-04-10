@@ -12,5 +12,5 @@ jobs:
     uses: ./.github/workflows/build_docs.yml
   release:
     uses: ./.github/workflows/release.yml
-    needs: 'build_arc_docs'
+    needs: 'build_docs'
 
