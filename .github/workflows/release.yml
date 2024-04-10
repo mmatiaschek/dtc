@@ -16,16 +16,21 @@ jobs:
       - name: Set version
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
               
-      - name: "Download PDF version"
-        uses: actions/download-artifact@v3
-        with:
-          name: solution_architecture.pdf
-
-      - name: "Download html5 version"
+      - name: "Download Arc42 html5 version"
         uses: actions/download-artifact@v3
         with:
           name: solution_architecture.zip
 
+      - name: "Download Arc42 PDF version"
+        uses: actions/download-artifact@v3
+        with:
+          name: solution_architecture.pdf
+
+      - name: "Download Ops Manual PDF version"
+        uses: actions/download-artifact@v3
+        with:
+          name: ops_manual.pdf
+  
       - name: "release candidate"
         if: contains(github.event.ref, '-rc')
         uses: "marvinpinto/action-automatic-releases@latest"
@@ -36,6 +41,7 @@ jobs:
           files: |
             solution_architecture-${{ env.RELEASE_VERSION }}.zip
             solution_architecture-${{ env.RELEASE_VERSION }}.pdf
+            ops_manual-${{ env.RELEASE_VERSION }}.pdf
         
       - name: "release"
         if: (!contains(github.event.ref, '-rc'))
@@ -47,3 +53,4 @@ jobs:
           files: |
             solution_architecture-${{ env.RELEASE_VERSION }}.zip
             solution_architecture-${{ env.RELEASE_VERSION }}.pdf
+            ops_manual-${{ env.RELEASE_VERSION }}.pdf
