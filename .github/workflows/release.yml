@@ -33,7 +33,7 @@ jobs:
   
       - name: "release candidate"
         if: contains(github.event.ref, '-rc')
-        uses: marvinpinto/action-automatic-releases@1.2.1
+        uses: marvinpinto/action-automatic-releases@v1.2.1
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: true
@@ -45,7 +45,7 @@ jobs:
         
       - name: "release"
         if: (!contains(github.event.ref, '-rc'))
-        uses: marvinpinto/action-automatic-releases@1.2.1
+        uses: marvinpinto/action-automatic-releases@v1.2.1
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
