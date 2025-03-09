@@ -17,23 +17,23 @@ jobs:
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
               
       - name: "Download Arc42 html5 version"
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: solution_architecture.zip
 
       - name: "Download Arc42 PDF version"
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: solution_architecture.pdf
 
       - name: "Download Ops Manual PDF version"
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ops_manual.pdf
   
       - name: "release candidate"
         if: contains(github.event.ref, '-rc')
-        uses: "marvinpinto/action-automatic-releases@latest"
+        uses: marvinpinto/action-automatic-releases@v2
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: true
@@ -45,7 +45,7 @@ jobs:
         
       - name: "release"
         if: (!contains(github.event.ref, '-rc'))
-        uses: "marvinpinto/action-automatic-releases@latest"
+        uses: marvinpinto/action-automatic-releases@v2
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false

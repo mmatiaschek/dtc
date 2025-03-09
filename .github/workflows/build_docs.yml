@@ -33,7 +33,7 @@ jobs:
           args: zip -qq -r solution_architecture-${{ env.RELEASE_VERSION }}.zip build/html5
       
       - name: "Upload html5 version"
-        uses: actions/upload-artifact@v3.1.1
+        uses: actions/upload-artifact@v4
         with:
           name: solution_architecture.zip
           path: solution_architecture-${{ env.RELEASE_VERSION }}.zip
@@ -55,13 +55,13 @@ jobs:
         run: mv build/pdf/operations/ops_manual.pdf ops_manual-${{ env.RELEASE_VERSION }}.pdf
 
       - name: "Upload solution_architecture.pdf version"
-        uses: actions/upload-artifact@v3.1.1
+        uses: actions/upload-artifact@v4
         with:
           name: solution_architecture.pdf
           path: solution_architecture-${{ env.RELEASE_VERSION }}.pdf
 
       - name: "Upload ops_manual.pdf version"
-        uses: actions/upload-artifact@v3.1.1
+        uses: actions/upload-artifact@v4
         with:
           name: ops_manual.pdf
           path: ops_manual-${{ env.RELEASE_VERSION }}.pdf
